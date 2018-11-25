@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+	<title>Todo list - Alexandre Machuron</title>
+
+	<meta charset="utf-8">
+
+	<script src="./jquery.js" type="text/javascript"></script>
+
+</head>
+
+
+
+<body>
+
+	<header>
+
+	    <nav>
+
+            <input id="Identifiant" type="text" placeholder="Identifiant">
+
+            <input id="MDP" type="text" placeholder="Mot de passe">
+
+            <button onclick="seconnecter()">Se connecter</button>
+
+	    </nav>
+
+    </header>
+
+    <section>
+
+        <div class="postit">
+
+			<div id="resultat">
+
+            </div>
+
+		</div>
+
+    </section>
+
+    <div id="buttonAddRm">
+
+        <button id="b1">add postit</button>
+
+        <button id="b2">rm postit</button>
+
+    </div>
+
+</body>
+
+
+
+<style>
+
+	body {
+		display: flex;
+		position:fixed;
+		width: 100%;
+		height: 100%;
+        flex-direction: column;
+        margin: 0;
+
+		background: url(background_register.jpg) no-repeat left fixed;
+		background-size: cover;
+	}
+
+    nav {
+        display: block;
+        width: 100%;
+        height: 50px;
+        background-color: rgba(72,78,234,0.4);
+        flex-direction: column;
+    }
+
+    input {
+        border-radius: 3px;
+        height: 25px;
+        vertical-align: middle;
+    }
+
+    section {
+display: flex;
+    }
+
+	.name{
+		width : 200px;
+		height : 20px;
+		border : 1px solid black;
+		border-radius : 10px;
+		text-align : center;
+		font-weight: bold;
+		display : inline-block;
+	}
+
+	.elements{
+
+	}
+
+	.postit {
+		width: 320px;
+		height: 400px;
+        border-radius: 5px;
+
+        background-color: rgb(255, 215, 0);
+        box-shadow: 15px 15px 10px -5px rgba(38,38,38,0.8);
+        margin: 2em;
+        flex-direction: row;
+
+	}
+
+
+
+</style>
+
+
+<script>
+
+    var newdiv = "<div class='postit'>";
+
+    $(document).ready(function(){
+        $("#b1").click(function(){
+            $("section").append(newdiv);
+        });
+
+        $("#b2").click(function(){
+            $(".postit").last().remove();
+        });
+    });
+
+
+
+        function seconnecter(){
+		var nom = $("#Identifiant").val();
+		var prenom = $("#MDP").val();
+
+
+		$.ajax({
+			url: "http://92.222.69.104/todo/listes",
+			headers:{"login":nom, "password":prenom}
+
+		}).done(function(data) {
+			//$("#resultat").html(JSON.stringify(data));
+
+
+
+				data.todoListes.forEach(function(d){
+
+					$("#resultat").append("<div class='name'>"+d.name+"</div>");
+
+					$("#resultat").append("<div class='elements'>"+d.elements+"</div>");
+
+					d.elements.forEach(function(e){
+
+						$("#resultat").append("<div class='date'>"+e+"</div>");
+
+					});
+
+
+                    })
+
+				});
+
+	}
+
+
+$(document).ready(function(){
+});
+
+</script>
+
+</html>
